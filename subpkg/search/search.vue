@@ -8,13 +8,19 @@
 	export default {
 		data() {
 			return {
-				
+				timer: null,  //延时器
+        kw: '' //搜索框输入内容
 			};
 		},
     methods:{
-      // 搜索框输入事件
-      input(){
-        
+      // 搜索框输入监听事件
+      input(e){
+        // console.log(e.value)
+        clearTimeout(this.timer)   // 第二步,若500毫秒内重复触发input输入事件,则清除上一个延时器重新计时
+
+        this.timer=setTimeout(()=>{        // 第一步建议一个500毫秒的延时器
+          this.kw=e.value
+        },500)
       }
     }
 	}
