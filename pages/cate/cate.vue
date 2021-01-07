@@ -1,5 +1,7 @@
 <template>
 <view >
+  <!-- 顶部搜索区域 -->
+  <my-search @click="gotoSearch"></my-search>
   <view class="scroll-view-container">
     <!-- 左侧的滚动视图布局 -->
     <scroll-view class="left-scroll-view" scroll-y :style="{height:wh +'px'}"> 
@@ -44,7 +46,8 @@
     onLoad(){
       // 调用uni的api获取设备信息
       const sysInfo=uni.getSystemInfoSync()
-      this.wh=sysInfo.windowHeight
+        // 可用高度 = 屏幕高度 - navigationBar高度 - tabBar高度 - 自定义的search组件高度
+      this.wh=sysInfo.windowHeight - 50
       this.getCateList()
     },
     methods:{
@@ -73,7 +76,13 @@
               uni.navigateTo({
                 url:'/subpkg/goods_list/goods_list?cid='+item.cat_id
               })
-        }
+        },
+        // 点击跳转搜索页面,功能直接在my-search组件内通过searchBoxHandler函数实现
+        // gotoSearch(){
+        //   uni.navigateTo({
+        //     url:'/subpkg/search/search'
+        //   })
+        // }
     }
 	}
 </script>
