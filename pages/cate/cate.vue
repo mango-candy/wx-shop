@@ -10,7 +10,7 @@
             </block>
     </scroll-view>
     <!-- 右侧的滚动视图布局 -->
-    <scroll-view class="right-scroll-view" scroll-y :style="{height: wh + 'px'}">
+    <scroll-view class="right-scroll-view" scroll-y :style="{height: wh + 'px'}" :scroll-top="scrollTop">
               <view class="cate-lv2" v-for="(item2,i2) in cateLevel2" :key="i2">
                 <!-- 二级分类 -->
                 <view class="cate-lv2-title"> /  {{item2.cat_name}} /</view>
@@ -37,7 +37,8 @@
 				wh:0, //不同设备上的屏幕可视高度
         cateList:[], //一级分类数据列表
         active:0, //当前选中项的索引，默认让第一项被选中
-        cateLevel2:[] //二级分类的列表
+        cateLevel2:[], //二级分类的列表
+        scrollTop:0 //右侧滚动条距离屏幕顶部的距离,像素为单位
 			};
 		},
     onLoad(){
@@ -61,6 +62,11 @@
           
           // 当选中项发生改变之后，需要为右侧的二级分类重新赋值
         this.cateLevel2 =this.cateList[i].children
+        
+        // 每次切换左侧一级菜单列表的时候自动将右侧滚动条置顶
+        this.scrollTop=this.scrollTop===0 ? 1 :0
+        // 可以简化为如下的代码：
+          // this.scrollTop = this.scrollTop ? 0 : 1
         }
     }
 	}
