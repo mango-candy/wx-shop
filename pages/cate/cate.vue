@@ -17,7 +17,7 @@
                 <!-- 当前二级分类下的三级分类列表 -->
                 <view class="cate-lv3-list">
                   <!-- 三级分类的item项 -->
-                  <view class="cate-lv3-item" v-for="(item3,i3) in item2.children" :key="i3">
+                  <view class="cate-lv3-item" v-for="(item3,i3) in item2.children" :key="i3" @click="gotoGoodsList(item3)">
                     <!-- 三级分类的图片 -->
                     <image :src="item3.cat_icon" ></image>
                     <!-- 三级分类的文本 -->
@@ -53,8 +53,8 @@
       if(res.meta.status!==200) return uni.$showMsg()
       this.cateList=res.message  //获取的是一级分类，里面包含了二级分类和三级分类
       
-      // 此处获取的二级分类无法做到响应式（根据一级列表的变化而变化）
-      // this.cateLevel2=res.message[0].children
+      // 此处获取的二级分类无法做到响应式（根据一级列表的变化而变化）  
+      this.cateLevel2=res.message[0].children   //此项不能删除,因为一旦删除,则第一次打开页面的时候没有办法显示右侧菜单 
       },
        // 选中项改变的事件处理函数
         activeChanged(i) {
@@ -67,6 +67,12 @@
         this.scrollTop=this.scrollTop===0 ? 1 :0
         // 可以简化为如下的代码：
           // this.scrollTop = this.scrollTop ? 0 : 1
+        },
+        // 点击三级商品菜单进入商品列表页面
+        gotoGoodsList(item){
+              uni.navigateTo({
+                url:'/subpkg/goods_list/goods_list?cid='+item.cat_id
+              })
         }
     }
 	}
