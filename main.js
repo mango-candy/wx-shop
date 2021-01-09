@@ -12,7 +12,7 @@ uni.$http = $http
 // 设置请求根路径!!!!!!!!!!!!!!!!!
 $http.baseUrl = 'https://www.uinav.com'
 
-// 设置请求前的请求拦截器
+// 设置 请求前的请求拦截器
 $http.beforeRequest = function(options) {
   uni.showLoading({
     title: '数据加载中...'
