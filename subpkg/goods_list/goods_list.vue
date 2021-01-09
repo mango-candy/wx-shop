@@ -21,7 +21,8 @@
           pagesize:10 //每页显示多少条数据
         },
         goodsList:[], //商品列表的详细数据  需要向服务器获取的
-        total:0 //总商品条数 需要向服务器获取的
+        total:0, //总商品条数 需要向服务器获取的
+        isloading:false // 上拉加载数据的节流阀
 			}
 		},
    onLoad(options){
@@ -34,7 +35,11 @@
    methods:{
      // 向服务器获取商品列表数据
     async getGoodsList(){
+      // 请求开始前设置开启节流阀
+      this.isloading=true
      const{data:res} = await uni.$http.get('/api/public/v1/goods/search',this.queryObj)
+     // 请求结束后关闭节流阀
+     this.isloading=false
      if(res.meta.status!==200) return uni.$showMsg()
      // 向服务器获取参数
      this.goodsList=[...this.goodsList,...res.message.goods]
@@ -43,6 +48,8 @@
    },
    // 上拉加载更多
    onReachBottom(){
+     // 如果节流阀当前是开启状态表示当前已有需求在加载中，终端新的请求
+     if(this.isloading=true) return
          this.queryObj.pagenum +1
          this.getGoodsList()
    }
