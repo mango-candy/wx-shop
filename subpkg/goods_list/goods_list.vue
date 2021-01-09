@@ -34,12 +34,14 @@
    },
    methods:{
      // 向服务器获取商品列表数据
-    async getGoodsList(){
+    async getGoodsList(cb){
       // 请求开始前设置开启节流阀
       this.isloading=true
      const{data:res} = await uni.$http.get('/api/public/v1/goods/search',this.queryObj)
      // 请求结束后关闭节流阀
      this.isloading=false
+     // 请求结束调用回调函数，终止下拉刷新  形参cb代表的是uni里的stopPullDownRefresh方法
+     cb && cb()
      if(res.meta.status!==200) return uni.$showMsg()
      // 向服务器获取参数
      this.goodsList=[...this.goodsList,...res.message.goods]
@@ -54,6 +56,17 @@
      if(this.isloading=true) return
          this.queryObj.pagenum +1
          this.getGoodsList()
+   },
+   // 下拉刷新
+   onPullDownRefresh() {
+     // 1. 重置关键数据
+     this.queryObj.pagenum = 1
+     this.total = 0
+     this.isloading = false
+     this.goodsList = []
+   
+     // 2. 重新发起请求 ，下拉的时候传入uni的stopPullDownRefresh方法结束下拉刷新，避免重复刷新
+     this.getGoodsList(() => uni.stopPullDownRefresh())
    }
 	}
 </script>

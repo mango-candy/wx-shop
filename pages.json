@@ -32,7 +32,9 @@
     }, {
       "path": "goods_list/goods_list",
       "style": {
-        "onReachBottomDistance": 150
+        "onReachBottomDistance": 150,  //开启上拉加载数据，值为上拉的距离
+        "enablePullDownRefresh": true, //开启下拉刷新
+        "backgroundColor": "#F8F8F8" //下拉后上方留白区域的背景色
       }
     }, {
       "path": "search/search",
