@@ -2,10 +2,10 @@
 	<view>
 		<view class="goods-list">
       <!-- block标签包裹循环的好处是，block标签的渲染的时候不会被渲染为实际元素 -->
-      <block v-for="(goods,i) in goodsList" :key="i"> 
+      <view v-for="(goods,i) in goodsList" :key="i" @click="gotoDetail(goods)"> 
       <!-- 商品item项 -->
         <my-goods :goods="goods"></my-goods>
-      </block>
+      </view>
 		</view>
 	</view>
 </template>
@@ -37,24 +37,30 @@
     async getGoodsList(cb){
       // 请求开始前设置开启节流阀
       this.isloading=true
-     const{data:res} = await uni.$http.get('/api/public/v1/goods/search',this.queryObj)
+     const{ data:res } = await uni.$http.get('/api/public/v1/goods/search',this.queryObj)
      // 请求结束后关闭节流阀
      this.isloading=false
      // 请求结束调用回调函数，终止下拉刷新  形参cb代表的是uni里的stopPullDownRefresh方法
      cb && cb()
      if(res.meta.status!==200) return uni.$showMsg()
      // 向服务器获取参数
-     this.goodsList=[...this.goodsList,...res.message.goods]
-     this.total=res.message.total
+     this.goodsList = [...this.goodsList,...res.message.goods]
+     this.total = res.message.total
+     },
+     // 点击商品列表item进入商品详情页面
+     gotoDetail(goods){
+       uni.navigateTo({
+         url:'/subpkg/goods_detail/goods_detail?goods_id='+goods.goods_id
+       })
      }
    },
    // 上拉加载更多
    onReachBottom(){
      // 若页码值于页码内数据量的积大于中数据量则停止加载下一页
-     if(this.queryObj.pagenum*this.queryObj.pagesize>=this.total) return uni.$showMsg('数据已全部加载完毕')
+     if(this.queryObj.pagenum * this.queryObj.pagesize >= this.total) return uni.$showMsg('数据已全部加载完毕')
      // 如果节流阀当前是开启状态表示当前已有需求在加载中，终端新的请求
-     if(this.isloading=true) return
-         this.queryObj.pagenum +1
+     if(this.isloading) return
+         this.queryObj.pagenum += 1
          this.getGoodsList()
    },
    // 下拉刷新
