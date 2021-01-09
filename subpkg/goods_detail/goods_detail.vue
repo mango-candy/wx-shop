@@ -1,6 +1,6 @@
 <template>
 	<view>
-		商品详情
+		测试SSH
 	</view>
 </template>
 
