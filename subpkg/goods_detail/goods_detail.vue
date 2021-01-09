@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="goods_info.goods_name">
     <!-- 轮播图区域 -->
 		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" :circular="true">
 		  <swiper-item v-for="(item,i) in goods_info.pics" :key="i">
@@ -24,6 +24,8 @@
         <!-- 运费 -->
         <view class="yf">快递：免运费</view>
       </view>
+      <!-- 商品详情信息 -->
+      <rich-text :nodes="goods_info.goods_introduce"></rich-text>
 	</view>
 </template>
 
@@ -45,6 +47,10 @@
       async getGoodsDetail(goods_id){
         const{data:res} = await uni.$http.get('/api/public/v1/goods/detail',{goods_id})
         if(res.meta.status!==200) return uni.$showMsg()
+        
+          // 使用字符串的 replace() 方法，为 img 标签添加行内的 style 样式，从而解决图片底部空白间隙的问题
+          // 使用字符串的 replace() 方法，将 webp 的后缀名替换为 jpg 的后缀名
+        res.message.goods_introduce = res.message.goods_introduce.replace(/<img /g, '<img style="display:block;" ').replace(/webp/g, 'jpg')
         this.goods_info=res.message
        },
           preview(i){
