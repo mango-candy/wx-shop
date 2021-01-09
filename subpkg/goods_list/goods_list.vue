@@ -48,6 +48,8 @@
    },
    // 上拉加载更多
    onReachBottom(){
+     // 若页码值于页码内数据量的积大于中数据量则停止加载下一页
+     if(this.queryObj.pagenum*this.queryObj.pagesize>=this.total) return uni.$showMsg('数据已全部加载完毕')
      // 如果节流阀当前是开启状态表示当前已有需求在加载中，终端新的请求
      if(this.isloading=true) return
          this.queryObj.pagenum +1
