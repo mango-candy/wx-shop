@@ -37,9 +37,14 @@
      const{data:res} = await uni.$http.get('/api/public/v1/goods/search',this.queryObj)
      if(res.meta.status!==200) return uni.$showMsg()
      // 向服务器获取参数
-     this.goodsList=res.message.goods
+     this.goodsList=[...this.goodsList,...res.message.goods]
      this.total=res.message.total
      }
+   },
+   // 上拉加载更多
+   onReachBottom(){
+         this.queryObj.pagenum +1
+         this.getGoodsList()
    }
 	}
 </script>
