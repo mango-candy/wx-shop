@@ -10,7 +10,7 @@
             <view class="goods-name">{{goods.goods_name}}</view>
             <!-- 商品价格 之所以用view多包一层是为了以后添加其他内容做准备 -->
             <view class="goods-info-box">
-              <view class="goods-price">￥{{goods.goods_price}}</view>
+              <view class="goods-price">￥{{goods.goods_price | tofixed}}</view>
             </view>
           </view>
         </view>
@@ -30,7 +30,15 @@
              // 默认的空图片
 				defaultPic: 'https://img3.doubanio.com/f/movie/8dd0c794499fe925ae2ae89ee30cd225750457b4/pics/movie/celebrity-default-medium.png'
 			};
-		}
+		},
+    // 过滤器
+    filters:{
+      tofixed(num){
+        // 在自定义tofixed方法里调用Number（）将里面的值转为数字类型
+        // 然后调用toFixed（2），表示保留2位小数
+       return Number(num).toFixed(2)
+      }
+    }
 	}
 </script>
 
