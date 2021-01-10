@@ -35,7 +35,11 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex' 
 	export default {
+    computed:{
+      ...mapState('m_cart',[])
+    },
 		data() {
 			return {
         // 商品详情对象
