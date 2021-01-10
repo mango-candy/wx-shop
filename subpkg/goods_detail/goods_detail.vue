@@ -26,6 +26,11 @@
       </view>
       <!-- 商品详情信息 -->
       <rich-text :nodes="goods_info.goods_introduce"></rich-text>
+      
+      <!-- 商品导航组件区域 -->
+      <view class="goods_nav">
+        <uni-goods-nav :fill="true"  :options="options" :buttonGroup="buttonGroup"  @click="onClick" @buttonClick="           buttonClick" />
+      </view>
 	</view>
 </template>
 
@@ -34,7 +39,26 @@
 		data() {
 			return {
         // 商品详情对象
-				goods_info:{}
+				goods_info:{},
+         options: [{
+              icon: 'shop',
+              text: '店铺'
+            }, {
+              icon: 'cart',
+              text: '购物车',
+              info: 2
+            }],
+            // 右侧按钮组的配置对象
+            buttonGroup: [{
+                text: '加入购物车',
+                backgroundColor: '#ff0000',
+                color: '#fff'
+              },
+              {
+                text: '立即购买',
+                backgroundColor: '#ffa200',
+                color: '#fff'
+              }]
 			};
 		},
     onLoad(options){
@@ -61,9 +85,16 @@
                // 所有图片 url 地址的数组
               urls:this.goods_info.pics.map(x=>x.pics_big)
             })
-          }
+          },
+          onClick(e){
+            // console.log(e)
+            if(e.content.text ==="购物车"){
+              uni.switchTab({
+                url: '/pages/cart/cart'
+              })
+            }
+        }
     },
-
 	}
 </script>
 
