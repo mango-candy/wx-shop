@@ -7,10 +7,9 @@ export default {
     // 购物车的数组，用来存储购物车中每个商品的信息对象
     // 每个商品的信息对象，都包含如下 6 个属性：
     // { goods_id, goods_name, goods_price, goods_count, goods_small_logo, goods_state }
-    cart: [],
+    cart: JSON.parse(uni.getStorageSync('cart') || '[]')
   }),
 
-  // 模块的 mutations 方法
   mutations: {
     // 1.定义addToCart添加购物车方法，形参内state代表模块内的state数据，goods代表外界传递过来的商品数据
     addToCart(state,goods){
@@ -23,10 +22,22 @@ export default {
      }else{
        // 3.2 如果相等，则证明需要添加的商品已存在购物车，只需要将购物车内的商品数量加1即可
        findResult.goods_count++
-     }
+      }
+      this.commit('m_cart/saveToStorage')
+    },
+    // 将购物车中的数据持久化存储到本地
+    saveToStorage(state) {
+       uni.setStorageSync('cart', JSON.stringify(state.cart))
     }
   },
 
   // 模块的 getters 属性
-  getters: {},
+  getters: {
+    // 统计购物车内的商品总数量
+    total(state){
+      let c = 0
+      state.cart.forEach(goods=> c += goods.goods_count)
+      return c
+    }
+  },
 }
