@@ -2,6 +2,7 @@
    <view class="goods-item">
           <!-- 左侧图片区域 -->
           <view class="goods-item-left">
+            <radio :checked="goods.goods_state" color="#C00000" v-if="showRadio" @click="radioClickHandler"></radio>
             <image :src="goods.goods_small_logo || defaultPic" class="goods-pic"></image>
           </view>
           <!-- 右侧文本区域 -->
@@ -11,6 +12,7 @@
             <!-- 商品价格 之所以用view多包一层是为了以后添加其他内容做准备 -->
             <view class="goods-info-box">
               <view class="goods-price">￥{{goods.goods_price | tofixed}}</view>
+              <uni-number-box :min="1" :value="goods.goods_count" v-if="showNum" @change="numChangeHandler"></uni-number-box>
             </view>
           </view>
         </view>
@@ -23,6 +25,14 @@
        goods:{
          type:Object,
          default:{}
+       }, 
+       showRadio:{
+         type:Boolean,
+         default:false
+       },
+       showNum:{
+         type:Boolean,
+         default:false
        }
     },
 		data() {
@@ -38,6 +48,21 @@
         // 然后调用toFixed（2），表示保留2位小数
        return Number(num).toFixed(2)
       }
+    },
+    methods:{
+      radioClickHandler(){
+        this.$emit('radio-change',{
+          goods_id:this.goods.goods_id,
+          goods_state:!this.goods.goods_state
+        })
+      },
+      numChangeHandler(val){
+        this.$emit('num-change',{
+          goods_id:this.goods.goods_id,
+          // goods_count:val - 0
+          goods_count:+val
+        })
+      }
     }
 	}
 </script>
@@ -50,6 +75,9 @@
 
   .goods-item-left {
     margin-right: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     .goods-pic {
       width: 100px;
@@ -66,7 +94,11 @@
     .goods-name {
       font-size: 13px;
     }
-
+    .goods-info-box{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     .goods-price {
       font-size: 16px;
       color: #c00000;

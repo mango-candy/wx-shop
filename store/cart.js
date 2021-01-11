@@ -28,6 +28,25 @@ export default {
     // 将购物车中的数据持久化存储到本地
     saveToStorage(state) {
        uni.setStorageSync('cart', JSON.stringify(state.cart))
+    },
+    // 更新购物车中商品选中状态
+    updataGoodsState(state,goods){
+      // 用购物车内已有的商品id和页面中发生状态改变的商品id进行比较
+     const findResult = state.cart.find(x=>x.goods_id ===goods.goods_id)
+     // 如果传递过来的商品id和购物车内已有的商品id相等，则将最新的商品勾选状态赋值给组件中存储的商品勾选状态
+      if(findResult){
+        findResult.goods_state=goods.goods_state
+        // 调用uni的本地存储的api
+        this.commit('m_cart/saveToStorage')
+      }
+    },
+    // 更新购物车内的商品数量
+    undataGoodsCount(state,goods){
+      const findResult = state.cart.find(x=>x.goods_id === goods.goods_id)
+      if(findResult){
+        findResult.goods_count=goods.goods_count
+        this.commit('m_cart/saveToStorage')
+      }
     }
   },
 
