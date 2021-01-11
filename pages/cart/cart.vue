@@ -9,11 +9,16 @@
     </view>
     
     <!-- 渲染购物车中的商品信息 -->
-    <block v-for="(goods,i) in cart" :key="i">
-      <my-goods :goods="goods" :showRadio="true" :showNum="true" @radio-change="radioChangeHandler" @num-change="numberChangeHandler"></my-goods>
-    </block>
+    <uni-swipe-action>
+      <block v-for="(goods,i) in cart" :key="i">
+         <uni-swipe-action-item :right-options="options" @click="swipeActionClickHandler(goods)">
+              <my-goods :goods="goods" :showRadio="true" :showNum="true" @radio-change="radioChangeHandler" @num-change="numberChangeHandler"></my-goods>
+         </uni-swipe-action-item>
+      </block>
+    </uni-swipe-action>
+    
+    
   </view>
-
 </template>
 
 <script>
@@ -30,10 +35,17 @@
     // 生命周期函数，在页面刚刷新出来的时候执行
     onShow(){},
 		data() {
-			return {};
+			return {
+        options:[{
+          text:'删除',
+          style:{
+            backgroundColor: '#C00000'
+          }
+        }]
+      };
 		},
     methods:{
-      ...mapMutations('m_cart',['updataGoodsState','undataGoodsCount']),
+      ...mapMutations('m_cart',['updataGoodsState','undataGoodsCount','removeGoodsByid']),
       // 商品勾选状态发生改变
       radioChangeHandler(e){
         // console.log(e) e里面包含了最新的商品id和商品勾选状态
@@ -42,6 +54,10 @@
       // 购物车内商品数量发生变化
       numberChangeHandler(e){
         this.undataGoodsCount(e)
+      },
+      // 点击了滑动操作按钮
+      swipeActionClickHandler(goods) {
+        this.removeGoodsByid(goods)
       }
     }
 	}

@@ -47,6 +47,11 @@ export default {
         findResult.goods_count=goods.goods_count
         this.commit('m_cart/saveToStorage')
       }
+    },
+    // 实现左滑动删除商品的功能
+    removeGoodsByid(state,goods){
+     state.cart = state.cart.filter(x=>x.goods_id !== goods.goods_id)
+     this.commit('m_cart/saveToStorage')
     }
   },
 
